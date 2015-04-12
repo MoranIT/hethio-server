@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# This script typically completes any required configuration of the package 
+# foo once foo has been unpacked from its Debian archive (".deb") file. Often, 
+# 'postinst' scripts ask the user for input, and/or warn the user that if he 
+# accepts default values, he should remember to go back and re-configure that 
+# package as the situation warrants. Many 'postinst' scripts then execute any 
+# commands necessary to start or restart a service once a new package has been 
+# installed or upgraded.
+#
+
+
+# Create configuration path
+CONF_FILENAME="/etc/hethio/hethio.conf"
+if [ ! -d /etc/hethio ]; then
+	mkdir -p /etc/hethio
+	echo "[Global]" > $CONF_FILENAME
+	echo "id=-1" >> $CONF_FILENAME
+	#echo "LogPath=/var/log/hethio" >> $CONF_FILENAME
+	#echo "LogLevel=1" >> $CONF_FILENAME
+	#echo "" >> $CONF_FILENAME
+	#echo "[SpeedTest]" >> $CONF_FILENAME
+	#echo "Enabled=True" >> $CONF_FILENAME
+	#echo "" >> $CONF_FILENAME
+	#echo "[Broker]" >> $CONF_FILENAME
+	#echo "broker=heth.io" >> $CONF_FILENAME
+	#echo "username=hethio" >> $CONF_FILENAME
+	echo "" >> $CONF_FILENAME
+	
+fi
+
+
+
+
+
+# Rename service file to match server executable
+if [ -f /etc/init.d/hethio-server-servicefile ]; then
+	if [ -f /etc/init.d/hethio-server ]; then
+		rm /etc/init.d/hethio-server
+	fi
+	mv /etc/init.d/hethio-server-servicefile /etc/init.d/hethio-server
+fi
+
+# Add hethio at startup
+update-rc.d hethio-server defaults
+
+# Start our service
+/etc/init.d/hethio-server start
+
+
