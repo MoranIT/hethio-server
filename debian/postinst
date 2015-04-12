@@ -15,7 +15,7 @@ CONF_FILENAME="/etc/hethio/server.conf"
 if [ ! -d /etc/hethio ]; then
 	mkdir -p /etc/hethio
 	echo "[Global]" > $CONF_FILENAME
-	echo "id=-1" >> $CONF_FILENAME
+	#echo "id=-1" >> $CONF_FILENAME
 	#echo "LogPath=/var/log/hethio" >> $CONF_FILENAME
 	#echo "LogLevel=1" >> $CONF_FILENAME
 	#echo "" >> $CONF_FILENAME
