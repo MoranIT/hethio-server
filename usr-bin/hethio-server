@@ -28,7 +28,7 @@ __credits__ = ["Daniel Moran"]
 __license__ = "GPL"
 __version__ = "1.0.0"
 __maintainer__ = "Daniel Moran"
-__email__ = "danielheth@hotmail.com"
+__email__ = "daniel@moranit.com"
 __status__ = "Development"
 
 ON_POSIX = 'posix' in sys.builtin_module_names
