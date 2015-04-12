@@ -33,8 +33,8 @@ setup(
     zip_safe = True,
 
 
-	author='Daniel H Moran',
-	author_email='daniel@moranit.com',
+	author='Daniel Moran',
+	author_email='danielheth@hotmail.com',
 	url='https://heth.io',
 	description='Internet monitoring server',
 	long_description=read('README.rst'),
