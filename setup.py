@@ -1,12 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    from ez_setup import use_setuptools
-    use_setuptools()
-    from setuptools import setup, find_packages
-
+from setuptools import setup, find_packages
 import os
 import glob
 import sys
@@ -21,7 +15,7 @@ setup(
 	version=read('VERSION.txt'),
 	install_requires = [], #['paho-mqtt','mysql-connector-python'],  # python dependencies
 	setup_requires = [],
-	packages = find_packages(exclude=['ez_setup']),
+	packages = find_packages(),
 	py_modules = ['hethio-server'],
 	scripts=[
 		'usr-bin/hethio-server'
@@ -32,8 +26,7 @@ setup(
 		('/usr/share/man/man8/', glob.glob('usr-share-man-man8/*.gz'))
 		],
 	package_data = {  # Files moved into /usr/share/hethio/
-        'hethio_data': ['*.png'],
-        'etc-init.d': ['*']
+        'hethio_data': ['*.png']
     	},
     include_package_data = True, 
     zip_safe = True,
