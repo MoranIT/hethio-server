@@ -41,7 +41,7 @@ fi
 
 # Rename service file to match server executable
 echo "Moving Init Script"
-mv -f /usr/share/hethio-server/init-script /etc/init.d/hethio-server
+cp -f /usr/share/hethio-server/init-script /etc/init.d/hethio-server
 chmod +x /etc/init.d/hethio-server
 
 
