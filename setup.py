@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 import os
-import glob
+import glob.glob as glob
 from distutils.core import setup
 import sys
 
@@ -18,13 +18,11 @@ setup(
 	
 	packages = find_packages(),
 	py_modules = ['hethio-server'],
-	scripts=[
-		'usr-bin/hethio-server'
-		],
+	scripts=glob('usr-bin/*'),
 	data_files = [
-		('share/hethio-server', glob.glob('hethio_data/*')),
-		('/etc/init.d', ['etc-init.d/*']),
-		('/usr/share/man/man8', glob.glob('usr-share-man-man8/*.gz'))
+		('share/hethio-server', glob('hethio_data/*')),
+		('/etc/init.d', glob('etc-init.d/*')),
+		('/usr/share/man/man8', glob('usr-share-man-man8/*.gz'))
 		],
 	include_package_data = True, 
     zip_safe = True,
