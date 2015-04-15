@@ -7,7 +7,7 @@
 # Delete config directory if it exists
 if [ -d /etc/hethio ]; then
 	#don't remove directory if agent is installed
-	if [ !-f /etc/hethio/agent.conf ]; then
+	if [ ! -f /etc/hethio/agent.conf ]; then
 		rm -rf /etc/hethio
 	else
 		rm /etc/hethio/server.conf
@@ -23,7 +23,7 @@ if [ -f /etc/init.d/hethio-server ]; then
 fi
 
 if [ -d /var/log/hethio ]; then
-	if [ !-f /var/log/hethio/agent.log ]; then
+	if [ ! -f /var/log/hethio/agent.log ]; then
 		rm -rf /var/log/hethio
 	else
 		rm /var/log/hethio/server*
