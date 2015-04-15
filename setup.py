@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 import os
-from glob.glob import glob
+import glob
 from distutils.core import setup
 import sys
 
