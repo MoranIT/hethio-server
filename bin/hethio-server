@@ -3,11 +3,10 @@
 
 """
 
-import os
+import os,signal,sys
 import logging
 import logging.handlers
 import argparse
-import sys
 import time  # this is only being used as part of the example
 from ConfigParser import SafeConfigParser # read in config file
 import subprocess # for executing other command line programs
@@ -199,7 +198,7 @@ def on_message(client, userdata, msg):
 	try:
 		message = json.loads(str(msg.payload))
 	except (ValueError, KeyError, TypeError) as error:
-		logger.info(error)
+		logger.info("Json ERROR: "+error)
 		message = None
 
 	inserted = False
@@ -254,6 +253,13 @@ def checkTableExists(tablename):
         return True
     return False
 
+
+def set_exit_handler(func):
+    signal.signal(signal.SIGTERM, func)
+def on_exit(sig, func=None):
+    print "exit handler triggered"
+    sys.exit(1)
+
 #=======================================================================================================================
 
 import paho.mqtt.client as mqtt
@@ -279,7 +285,7 @@ def main():
 	try:
 		client.loop_forever()
 	except (KeyboardInterrupt, SystemExit):
-		logger.info("Exiting Application")
+		logger.info("Keyboard Interrupt")
 	except:
 		# report error and proceed
 		logger.info("Unexpected error")
@@ -287,6 +293,8 @@ def main():
 		cnx.close()
 		raise
 
+
+	logger.info("Exiting Application")
 	cursor.close()
 	cnx.close()
 		
@@ -294,4 +302,5 @@ def main():
 
 
 if __name__ == '__main__':
+	set_exit_handler(on_exit)
 	main()
