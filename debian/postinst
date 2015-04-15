@@ -11,6 +11,12 @@
 
 echo "<postinst>"
 
+if [ -f /usr/bin/hethio-server ]; then
+	chmod +x /usr/bin/hethio-server
+else
+	echo "ERROR: Service Missing!"
+fi
+
 # Create configuration path
 CONF_FILENAME="/etc/hethio/server.conf"
 if [ ! -d /etc/hethio ]; then
@@ -36,6 +42,8 @@ fi
 # Rename service file to match server executable
 echo "Moving Init Script"
 mv -f /usr/share/hethio-server/init-script /etc/init.d/hethio-server
+chmod +x /etc/init.d/hethio-server
+
 
 if [ -f /etc/init.d/hethio-server ]; then
 	echo "Renaming Service Script"
