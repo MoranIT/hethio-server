@@ -20,9 +20,9 @@ setup(
 	py_modules = ['hethio-server'],
 	scripts=glob.glob('bin/*'),
 	data_files = [
-		('share/hethio-server', glob.glob('hethio_data/*')),
+		('share/hethio-server', glob.glob('data/*')),
 		('/etc/init.d', ['hethio-server-servicefile']),
-		('/usr/share/man/man8', glob.glob('usr-share-man-man8/*.gz'))
+		('/usr/share/man/man8', glob.glob('man/*.gz'))
 		],
 	include_package_data = True, 
     zip_safe = True,
