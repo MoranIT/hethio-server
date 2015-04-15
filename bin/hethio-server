@@ -198,8 +198,8 @@ def on_message(client, userdata, msg):
 	# convert payload into a json object
 	try:
 		message = json.loads(str(msg.payload))
-	except ValueError as e:
-		logger.info("Json ERROR: {}".format(e))
+	except (ValueError, KeyError, TypeError) as error:
+		logger.info(error)
 		message = None
 
 	inserted = False
@@ -211,21 +211,28 @@ def on_message(client, userdata, msg):
 		if checkTableExists(table):
 		    keys = ""
 		    values = ""
+		    ignore = False
 		    for key, value in message.iteritems():
-				keys = keys+","+key
+				keys = keys+","+key.tolower()
 				values = values+",'"+value+"'"
-		    keys = keys[1:]
-		    values = values[1:]
+				if key.lower() == "agent":
+					if value == "-1":
+						ignore = True
 
-		    sql = "INSERT INTO "+table+" ("+keys+") VALUES("+values+")"
-		    try:
-				cursor.execute(sql)
-				#id = cursor.lastrowid
-				#logger.info("    id="+str(id))
-				cnx.commit()
-				inserted = True
-		    except mysql.Error as e:
-				logger.info("MySQL ERROR:  {}".format(e))
+			# ignore any messages where the agent id = -1
+			if ignore is not True:
+			    keys = keys[1:]
+			    values = values[1:]
+
+			    sql = "INSERT INTO "+table+" ("+keys+") VALUES("+values+")"
+			    try:
+					cursor.execute(sql)
+					#id = cursor.lastrowid
+					#logger.info("    id="+str(id))
+					cnx.commit()
+					inserted = True
+			    except mysql.Error as e:
+					logger.info("MySQL ERROR:  {}".format(e))
 	else:
 		logger.info("WARNING:  Msg is not a valid JSON object!")
 
