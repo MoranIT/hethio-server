@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from setuptools import setup, find_packages
+try:
+    from setuptools import setup, find_packages
+except ImportError:
+    from ez_setup import use_setuptools
+    use_setuptools()
+    from setuptools import setup, find_packages
+
 import os
 import glob
 import sys
@@ -13,9 +19,9 @@ def read(fname):
 setup(
 	name='hethio-server',
 	version=read('VERSION.txt'),
-	requires = ['paho-mqtt','mysql-connector-python'],  # python dependencies
-
-	packages = find_packages(),
+	install_requires = ['paho-mqtt','mysql-connector-python'],  # python dependencies
+	setup_requires = [],
+	packages = find_packages(exclude=['ez_setup']),
 	py_modules = ['hethio-server'],
 	scripts=[
 		'usr-bin/hethio-server'
