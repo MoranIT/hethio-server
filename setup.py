@@ -3,6 +3,7 @@
 from setuptools import setup, find_packages
 import os
 import glob
+from distutils.core import setup
 import sys
 
 # http://pythonhosted.org/setuptools/setuptools.html#new-and-changed-setup-keywords
