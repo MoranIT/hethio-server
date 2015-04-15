@@ -34,9 +34,9 @@ fi
 
 
 # Rename service file to match server executable
-if [ -f /etc/init.d/hethio-server-servicefile ]; then
-	echo "Renaming Service Script"
-	mv -f /etc/init.d/hethio-server-servicefile /etc/init.d/hethio-server
+if [ -f /etc/init.d/hethio-server ]; then
+	#echo "Renaming Service Script"
+	#mv -f /etc/init.d/hethio-server-servicefile /etc/init.d/hethio-server
 
 	# Add hethio at startup
 	echo "Configuring Service to run at Startup"
