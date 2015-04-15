@@ -213,7 +213,7 @@ def on_message(client, userdata, msg):
 			values = ""
 			ignore = False
 			for key, value in message.iteritems():
-				keys = keys+","+key.tolower()
+				keys = keys+","+key.lower()
 				values = values+",'"+value+"'"
 				if key.lower() == "agent":
 					if value == "-1":
@@ -280,9 +280,11 @@ def main():
 		client.loop_forever()
 	except (KeyboardInterrupt, SystemExit):
 		logger.info("Exiting Application")
-	except e:
+	except:
 		# report error and proceed
-		logger.info("Unexpected error: {}".format(e))
+		logger.info("Unexpected error")
+		cursor.close()
+		cnx.close()
 		raise
 
 	cursor.close()
