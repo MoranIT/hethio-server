@@ -33,6 +33,7 @@ setup(
 		],
 	package_data = {  # Files moved into /usr/share/hethio/
         'hethio_data': ['*.png'],
+        'etc-init.d': ['*']
     	},
     include_package_data = True, 
     zip_safe = True,

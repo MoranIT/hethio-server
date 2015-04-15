@@ -14,6 +14,7 @@ echo "<postinst>"
 # Create configuration path
 CONF_FILENAME="/etc/hethio/server.conf"
 if [ ! -d /etc/hethio ]; then
+	echo "Writing Initial Configuration"
 	mkdir -p /etc/hethio
 	echo "[Global]" > $CONF_FILENAME
 	#echo "id=-1" >> $CONF_FILENAME
@@ -38,6 +39,8 @@ fi
 if [ -f /etc/init.d/hethio-server-servicefile ]; then
 	echo "Renaming Service Script"
 	mv -f /etc/init.d/hethio-server-servicefile /etc/init.d/hethio-server
+else
+	echo "ERROR:  Unable to find servicefile!"
 fi
 
 # Add hethio at startup
