@@ -9,6 +9,7 @@
 # installed or upgraded.
 #
 
+echo "<postinst>"
 
 # Create configuration path
 CONF_FILENAME="/etc/hethio/server.conf"

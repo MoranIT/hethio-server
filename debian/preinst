@@ -5,6 +5,7 @@
 # which are being upgraded until their installation or upgrade is completed 
 # (following the successful execution of the 'postinst' script).
 #
+echo "<preinst>"
 
 # Stop hethio-server service if it exists
 if [ -f /etc/init.d/hethio-server ]; then

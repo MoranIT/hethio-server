@@ -3,6 +3,7 @@
 # This script typically modifies links or other files associated with foo, 
 # and/or removes files created by the package.
 #
+echo "<postrm>"
 
 # Delete config directory if it exists
 if [ -d /etc/hethio ]; then
