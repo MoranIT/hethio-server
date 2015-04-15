@@ -47,6 +47,6 @@ if [ -f /etc/init.d/hethio-server-servicefile ]; then
 	/etc/init.d/hethio-server start
 else
 	echo "ERROR:  Unable to find servicefile!"
-	exit(1)
+	exit 1
 fi
 
