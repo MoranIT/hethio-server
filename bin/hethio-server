@@ -185,7 +185,7 @@ def publish(topic, msg):
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
-	print("Connected with result code "+str(rc))
+	logger.info("Connected with result code "+str(rc))
 
 	# Subscribing in on_connect() means that if we lose the connection and
 	# reconnect then subscriptions will be renewed.
@@ -193,13 +193,13 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-	print(msg.topic+" "+str(msg.payload))
+	logger.info(msg.topic+" "+str(msg.payload))
 
 	# convert payload into a json object
 	try:
 		message = json.loads(str(msg.payload))
 	except ValueError as e:
-		print("Json ERROR: {}".format(e))
+		logger.info("Json ERROR: {}".format(e))
 		message = None
 
 	inserted = False
@@ -221,20 +221,20 @@ def on_message(client, userdata, msg):
 		    try:
 				cursor.execute(sql)
 				#id = cursor.lastrowid
-				#print("    id="+str(id))
+				#logger.info("    id="+str(id))
 				cnx.commit()
 				inserted = True
 		    except mysql.Error as e:
-				print("MySQL ERROR:  {}".format(e))
+				logger.info("MySQL ERROR:  {}".format(e))
 	else:
-		print("WARNING:  Msg is not a valid JSON object!")
+		logger.info("WARNING:  Msg is not a valid JSON object!")
 
 	# if all else fails, we still want to capture the message    
 	if inserted is not True: # insert data into the 'raw' table
 	    data_raw = (msg.topic,str(msg.payload))
 	    cursor.execute(add_raw, data_raw)
 	    #id = cursor.lastrowid
-	    #print(" --> "+str(id))
+	    #logger.info(" --> "+str(id))
 	    cnx.commit()
 	    inserted = True
 
@@ -272,10 +272,10 @@ def main():
 	try:
 		client.loop_forever()
 	except (KeyboardInterrupt, SystemExit):
-		print("Exiting Application")
+		logger.info("Exiting Application")
 	except e:
 		# report error and proceed
-		print("Unexpected error: {}".format(e))
+		logger.info("Unexpected error: {}".format(e))
 		raise
 
 	cursor.close()

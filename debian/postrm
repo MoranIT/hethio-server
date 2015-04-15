@@ -9,24 +9,31 @@ echo "<postrm>"
 if [ -d /etc/hethio ]; then
 	#don't remove directory if agent is installed
 	if [ ! -f /etc/hethio/agent.conf ]; then
+		echo "Removing conf directory."
 		rm -rf /etc/hethio
 	else
+		echo "Removing server.conf only, since agent is currently installed."
 		rm /etc/hethio/server.conf
 	fi
 fi
 
-# Remove hethio at startup
-update-rc.d -f hethio-server remove
 
 # Remove Service Script
 if [ -f /etc/init.d/hethio-server ]; then
-	rm -rf /etc/init.d/hethio-server
+	# Remove hethio at startup
+	echo "Removing startup scripts."
+	chmod +x /etc/init.d/hethio-server
+	update-rc.d -f hethio-server remove
+
+	rm /etc/init.d/hethio-server
 fi
 
 if [ -d /var/log/hethio ]; then
 	if [ ! -f /var/log/hethio/agent.log ]; then
+		echo "Removing logs directory."
 		rm -rf /var/log/hethio
 	else
+		echo "Removing server logs only, since agent is currently installed."
 		rm /var/log/hethio/server*
 	fi
 fi
