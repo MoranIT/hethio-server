@@ -21,7 +21,6 @@ setup(
 	scripts=glob.glob('bin/*'),
 	data_files = [
 		('share/hethio-server', glob.glob('data/*')),
-		('/etc/init.d', ['hethio-server-servicefile']),
 		('/usr/share/man/man8', glob.glob('man/*.gz'))
 		],
 	include_package_data = True, 
