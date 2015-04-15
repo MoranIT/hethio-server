@@ -5,17 +5,17 @@
 #
 echo "<postrm>"
 
-# Delete config directory if it exists
-if [ -d /etc/hethio ]; then
-	#don't remove directory if agent is installed
-	if [ ! -f /etc/hethio/agent.conf ]; then
-		echo "Removing conf directory."
-		rm -rf /etc/hethio
-	else
-		echo "Removing server.conf only, since agent is currently installed."
-		rm /etc/hethio/server.conf
-	fi
-fi
+## Delete config directory if it exists
+#if [ -d /etc/hethio ]; then
+#	#don't remove directory if agent is installed
+#	if [ ! -f /etc/hethio/agent.conf ]; then
+#		echo "Removing conf directory."
+#		rm -rf /etc/hethio
+#	else
+#		echo "Removing server.conf only, since agent is currently installed."
+#		rm /etc/hethio/server.conf
+#	fi
+#fi
 
 
 # Remove Service Script
