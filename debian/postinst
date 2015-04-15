@@ -35,10 +35,7 @@ fi
 
 # Rename service file to match server executable
 if [ -f /etc/init.d/hethio-server-servicefile ]; then
-	if [ -f /etc/init.d/hethio-server ]; then
-		rm /etc/init.d/hethio-server
-	fi
-	mv /etc/init.d/hethio-server-servicefile /etc/init.d/hethio-server
+	mv -f /etc/init.d/hethio-server-servicefile /etc/init.d/hethio-server
 fi
 
 # Add hethio at startup
