@@ -14,7 +14,7 @@ def read(fname):
 setup(
 	name='hethio-server',
 	version=read('VERSION.txt'),
-	install_requires = [],  # python dependencies
+	install_requires = ['paho-mqtt','mysql-connector-python'],  # python dependencies
 
 	packages = find_packages(),
 	py_modules = ['hethio-server'],

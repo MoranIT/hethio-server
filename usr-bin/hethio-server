@@ -183,68 +183,103 @@ def publish(topic, msg):
 
 
 
+# The callback for when the client receives a CONNACK response from the server.
+def on_connect(client, userdata, flags, rc):
+	print("Connected with result code "+str(rc))
+
+	# Subscribing in on_connect() means that if we lose the connection and
+	# reconnect then subscriptions will be renewed.
+	client.subscribe("/#")
+
+# The callback for when a PUBLISH message is received from the server.
+def on_message(client, userdata, msg):
+	print(msg.topic+" "+str(msg.payload))
+
+	# convert payload into a json object
+	try:
+		message = json.loads(str(msg.payload))
+	except ValueError as e:
+		print("Json ERROR: {}".format(e))
+		message = None
+
+	inserted = False
+	if json is not None:
+		global cursor, add_raw, add_test
+		table = msg.topic[1:]
+		inserted = False
+
+		if checkTableExists(table):
+		    keys = ""
+		    values = ""
+		    for key, value in message.iteritems():
+				keys = keys+","+key
+				values = values+",'"+value+"'"
+		    keys = keys[1:]
+		    values = values[1:]
+
+		    sql = "INSERT INTO "+table+" ("+keys+") VALUES("+values+")"
+		    try:
+				cursor.execute(sql)
+				#id = cursor.lastrowid
+				#print("    id="+str(id))
+				cnx.commit()
+				inserted = True
+		    except mysql.Error as e:
+				print("MySQL ERROR:  {}".format(e))
+	else:
+		print("WARNING:  Msg is not a valid JSON object!")
+
+	# if all else fails, we still want to capture the message    
+	if inserted is not True: # insert data into the 'raw' table
+	    data_raw = (msg.topic,str(msg.payload))
+	    cursor.execute(add_raw, data_raw)
+	    #id = cursor.lastrowid
+	    #print(" --> "+str(id))
+	    cnx.commit()
+	    inserted = True
+
+
+
+def checkTableExists(tablename):
+    global cursor
+    cursor.execute("""SELECT COUNT(*) FROM information_schema.tables WHERE table_name = '{0}' """.format(tablename.replace('\'', '\'\'')))
+    if cursor.fetchone()[0] == 1:
+        return True
+    return False
+
 #=======================================================================================================================
 
+import paho.mqtt.client as mqtt
+import mysql.connector as mysql
+import json
 
-# THIS FUNCTION IS EXECUTED EVERY MINUTE
-def every_minute():
-	global logger,__minute
-	logger.info("Minute Elapsed")
-	#logger.info("The counter is now " + str(i))
-	#print "This is a print"
-	
-	read_config() #reload config every minute
-
-	
-
-	__minute = __minute + 1
-	return;
-
-# THIS FUNCTION IS EXECUTED EVERY HOUR
-def every_hour():
-	global logger,__minute, __hour, __SPENABLED
-	if __minute >= 60: # EVERY HOUR
-		logger.info("Hour Elapsed")
-
-		# do nothing for now
-
-		__minute = 0
-		__hour = __hour + 1
-	return;
-
-# THIS FUNCTION IS EXECUTED EVERY HOUR
-def every_day():
-	global logger,__hour
-	if __hour >= 24: # EVERY HOUR
-		logger.info("Hour Elapsed")
-
-		#do something every 24 hours
-
-		__hour = 0
-	return;
-
-
-
-
-#=======================================================================================================================
-# MAIN DAEMON LOOP
+global cursor, add_raw
+cnx = mysql.connect(user='hethio', database='hethio')
+cursor = cnx.cursor()
+add_raw = ("INSERT INTO raw (topic,msg) VALUES (%s,%s)")
 
 def main():
-	global logger,TIMESTAMP
-			
-	oldepoch = int(time.time()) - 3600
-	# Loop forever, doing something useful hopefully:
-	while True:
-		epoch = int(time.time()) #get current unix timestamp
-		TIMESTAMP = datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+	client = mqtt.Client()
+	client.on_connect = on_connect
+	client.on_message = on_message
 
-		if epoch - oldepoch >= 60: # EVERY MINUTE
-			every_hour()
-			every_minute()
-			every_day()
+	client.connect("127.0.0.1", 1883, 60)
 
-		oldepoch = epoch
-		time.sleep(60)
+	# Blocking call that processes network traffic, dispatches callbacks and
+	# handles reconnecting.
+	# Other loop*() functions are available that give a threaded interface and a
+	# manual interface.
+	try:
+		client.loop_forever()
+	except (KeyboardInterrupt, SystemExit):
+		print("Exiting Application")
+	except e:
+		# report error and proceed
+		print("Unexpected error: {}".format(e))
+		raise
+
+	cursor.close()
+	cnx.close()
 		
 
 
