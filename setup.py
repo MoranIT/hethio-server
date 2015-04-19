@@ -20,6 +20,7 @@ setup(
 	py_modules = ['hethio-server'],
 	scripts=glob.glob('bin/*'),
 	data_files = [
+		('share/hethio-server', glob.glob('VERSION.txt')),
 		('share/hethio-server', glob.glob('data/*')),
 		('/usr/share/man/man8', glob.glob('man/*.gz'))
 		],
