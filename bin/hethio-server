@@ -267,8 +267,23 @@ import mysql.connector as mysql
 import json
 
 global cursor, add_raw
-cnx = mysql.connect(user='hethio', database='hethio')
-cursor = cnx.cursor()
+
+
+attempts = 0
+
+while attempts < 3:
+	try:
+		cnx = mysql.connect(user='hethio', database='hethio')
+		cursor = cnx.cursor()
+	except:
+		attempts += 1
+		logger.info("Attempt %d, Unable to connect to MySQL Server..." % attempts)
+
+if attempts >= 3:
+	logger.info("Unable to continue without a MySQL connection!")
+	sys.exit()
+
+
 add_raw = ("INSERT INTO raw (topic,msg) VALUES (%s,%s)")
 
 def main():
