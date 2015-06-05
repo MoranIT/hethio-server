@@ -184,6 +184,7 @@ def publish(topic, msg):
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
+	global logger
 	logger.info("Connected with result code "+str(rc))
 
 	# Subscribing in on_connect() means that if we lose the connection and
@@ -192,6 +193,7 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
+	global logger
 	logger.info(msg.topic+" "+str(msg.payload))
 
 	# convert payload into a json object
@@ -247,7 +249,7 @@ def on_message(client, userdata, msg):
 
 
 def checkTableExists(tablename):
-    global cursor
+    global cursor, logger
     cursor.execute("""SELECT COUNT(*) FROM information_schema.tables WHERE table_name = '{0}' """.format(tablename.replace('\'', '\'\'')))
     if cursor.fetchone()[0] == 1:
         return True
@@ -275,6 +277,7 @@ while attempts < 3:
 	try:
 		cnx = mysql.connect(user='hethio', database='hethio')
 		cursor = cnx.cursor()
+		break # out of this attempt loop
 	except:
 		attempts += 1
 		logger.info("Attempt %d, Unable to connect to MySQL Server..." % attempts)
